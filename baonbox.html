@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baon Box - Affordable Meals, within your budget</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#FF5500;--primary-hover:#E04B00;--cream:#FFF8EE;--card:#fff;--ink:#2A2118;--mut:#8E8377;--line:#E8E0D5;--peach:#FFE6D5;--accent:#FF9F66;--green:#2E7D32;--danger:#D32F2F;--dangerbg:#FFEBEA}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;line-height:1.5}
+h1,h2,h3,.brand{font-family:Fredoka,"Plus Jakarta Sans",sans-serif;margin:0}
+.hidden{display:none!important}.o{color:var(--primary)}
+label{display:block;font-size:.8rem;font-weight:700;margin:14px 0 6px}
+input,select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:14px;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
+textarea{min-height:80px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 18px;border:0;border-radius:14px;background:var(--primary);color:#fff;font:inherit;font-weight:700;cursor:pointer;margin-top:18px}
+.btn:hover{background:var(--primary-hover)}.btn:disabled{opacity:.6;cursor:wait}
+.btn.sec{background:#fff;color:var(--ink);border:1.5px solid var(--line)}.btn.sec:hover{background:var(--peach)}
+.btn.sm{width:auto;margin:0;padding:8px 14px;font-size:.85rem}
+.link{background:none;border:0;color:var(--primary);font:inherit;font-weight:600;cursor:pointer;padding:0;text-decoration:underline}
+.msg{min-height:1.3em;margin-top:12px;font-size:.88rem}.msg.e{color:var(--danger)}.msg.o{color:var(--green)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+.sub{color:var(--mut);font-size:.9rem;margin:2px 0 0}
+/* auth */
+.hero{background:var(--primary);color:#fff;text-align:center;padding:46px 24px 80px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 28%,#ff9f66 0 14px,transparent 15px),radial-gradient(circle at 88% 18%,#ff9f66 0 20px,transparent 21px),radial-gradient(circle at 78% 82%,#ff9f66 0 12px,transparent 13px),radial-gradient(circle at 20% 88%,#ff9f66 0 18px,transparent 19px);opacity:.7}
+.hero>*{position:relative}.hero h1{font-size:2.6rem}.hero h1 span{color:var(--peach)}.hero p{margin:6px 0 0;color:#ffe6d5}
+.logo{width:64px;height:64px;border-radius:20px;background:#fff;color:var(--primary);display:grid;place-items:center;font-size:1.8rem;margin:0 auto 12px}
+.authcard{max-width:440px;margin:-48px auto 40px;padding:0 16px;position:relative}
+.tabs{display:flex;background:var(--peach);border-radius:14px;padding:4px;margin:16px 0 4px}
+.tabs button{flex:1;padding:10px;border:0;border-radius:11px;background:none;color:var(--mut);font:inherit;font-weight:700;cursor:pointer}
+.tabs button.on{background:#fff;color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;font-weight:500;margin-top:14px}.chk input{width:auto;margin-top:4px}
+/* app */
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 96px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px 0 10px}
+.top .brand{font-size:1.6rem}
+.av{width:42px;height:42px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:700}
+.hi h2{font-size:1.5rem}.hi p{margin:2px 0 14px;color:var(--mut)}
+.search{position:relative}.search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut)}.search input{padding-left:42px;border-radius:99px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:14px 0 6px;scrollbar-width:none}
+.chip{flex:none;padding:8px 16px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-weight:600;font-size:.85rem;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 12px;flex-wrap:wrap}
+.bar select{width:auto;padding:8px 12px;font-size:.85rem;border-radius:99px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pc{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;position:relative}
+.pc.off{opacity:.55}
+.em{background:var(--peach);height:96px;display:grid;place-items:center;font-size:3rem}
+.pb{padding:12px;display:flex;flex-direction:column;gap:2px;flex:1}
+.pb b{font-size:.95rem;line-height:1.25}.pb small{color:var(--mut);font-size:.75rem}
+.price{font-family:Fredoka,sans-serif;font-weight:600;color:var(--primary);font-size:1.15rem;margin-top:4px}
+.tag{position:absolute;top:8px;left:8px;background:var(--primary);color:#fff;font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:99px}
+.tag.g{background:var(--mut);left:auto;right:8px}
+.acts{display:flex;gap:6px;padding:0 12px 12px}.acts button{flex:1;padding:7px 0;border:1.5px solid var(--line);background:#fff;border-radius:10px;cursor:pointer;color:var(--ink)}
+.acts button.d{color:var(--danger);border-color:var(--dangerbg);background:var(--dangerbg)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:36px 10px;border:2px dashed var(--line);border-radius:20px}
+.banner{background:var(--peach);border-radius:16px;padding:12px 14px;font-size:.85rem;margin:6px 0 10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:20}
+.nav div{max-width:960px;margin:0 auto;display:flex}
+.nav button{flex:1;padding:10px 0 12px;border:0;background:none;color:var(--mut);font:inherit;font-size:.72rem;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav button i{font-size:1.2rem}.nav button.on{color:var(--primary)}
+.modal{position:fixed;inset:0;background:rgba(42,33,24,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:#fff;width:100%;max-width:480px;border-radius:26px 26px 0 0;padding:22px;max-height:92vh;overflow:auto}
+@media(min-width:600px){.modal{align-items:center;padding:18px}.sheet{border-radius:26px}}
+.big{background:var(--peach);border-radius:20px;height:130px;display:grid;place-items:center;font-size:4.2rem;margin-bottom:14px}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;font-weight:600;padding:11px 20px;border-radius:99px;z-index:70;max-width:92vw;font-size:.9rem}
+.who{text-align:center;padding:30px 0 10px}.who .av{width:78px;height:78px;font-size:2rem;margin:0 auto 10px}
+.rolechip{display:inline-block;background:var(--peach);color:var(--primary);font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:99px;margin-top:4px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN / REGISTER -->
+<div id="auth">
+ <div class="hero"><div class="logo"><i class="fa-solid fa-bowl-food"></i></div><h1>Baon <span>Box</span></h1><p>Affordable meals, within your budget</p></div>
+ <div class="authcard"><div class="card">
+  <h2>Welcome!</h2><p class="sub">Log in or create an account to order.</p>
+  <div class="tabs"><button id="tLogin" class="on" type="button">Log in</button><button id="tReg" type="button">Register</button></div>
+  <div id="fLogin">
+   <label for="lEmail">Email</label><input id="lEmail" type="email" autocomplete="email">
+   <label for="lPw">Password</label><input id="lPw" type="password" autocomplete="current-password">
+   <button id="bLogin" class="btn" type="button">Log in</button>
+   <p style="margin:12px 0 0"><button id="bForgot" class="link" type="button">Forgot password?</button></p>
+  </div>
+  <div id="fReg" class="hidden">
+   <div class="r2"><div><label for="rFirst">First name</label><input id="rFirst" autocomplete="given-name"></div><div><label for="rLast">Last name</label><input id="rLast" autocomplete="family-name"></div></div>
+   <label for="rPhone">Mobile number</label><input id="rPhone" type="tel" placeholder="09XXXXXXXXX" autocomplete="tel">
+   <label for="rAddr">Address</label><input id="rAddr" autocomplete="street-address">
+   <label for="rEmail">Email</label><input id="rEmail" type="email" autocomplete="email">
+   <div class="r2"><div><label for="rPw">Password</label><input id="rPw" type="password" autocomplete="new-password"></div><div><label for="rPw2">Confirm</label><input id="rPw2" type="password" autocomplete="new-password"></div></div>
+   <label class="chk"><input id="rConsent" type="checkbox"><span>I agree to the <button id="bPriv" class="link" type="button">Data Privacy Notice</button> and consent to the processing of my personal information.</span></label>
+   <button id="bReg" class="btn" type="button">Create account</button>
+  </div>
+  <div id="aMsg" class="msg" role="status" aria-live="polite"></div>
+ </div></div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+ <div id="vHome" class="wrap">
+  <div class="top"><span class="brand">Baon <span class="o">Box</span></span><div id="avTop" class="av">B</div></div>
+  <div id="vBanner" class="banner hidden"><span style="flex:1;min-width:180px">Please verify your email to place orders. Check your inbox (and Spam).</span><button id="bResend" class="btn sm" type="button">Resend</button><button id="bVerified" class="btn sm sec" type="button">I verified</button></div>
+  <div class="hi"><h2 id="hiName">Hi!</h2><p id="hiSub">What's for baon today?</p></div>
+  <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" placeholder="Search meals, snacks, drinks..." aria-label="Search"></div>
+  <div id="chips" class="chips" role="tablist"></div>
+  <div class="bar"><b id="count"></b>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="bAdd" class="btn sm hidden" type="button"><i class="fa-solid fa-plus"></i> Add item</button><button id="bSample" class="btn sm sec hidden" type="button">Load sample menu</button>
+   <select id="sort" aria-label="Sort"><option value="">Sort: Default</option><option value="low">Price: Low to high</option></select></div></div>
+  <div id="grid" class="grid"></div>
+ </div>
+ <div id="vProf" class="wrap hidden">
+  <div class="who"><div id="avBig" class="av">B</div><h2 id="pName"></h2><p id="pMail" class="sub"></p><span id="pRole" class="rolechip"></span></div>
+  <div class="card" style="margin-top:14px"><b>Account</b><p class="sub" id="pInfo"></p><button id="bOut" class="btn sec" type="button"><i class="fa-solid fa-right-from-bracket"></i> Log out</button></div>
+ </div>
+ <nav class="nav"><div><button id="nHome" class="on" type="button"><i class="fa-solid fa-house"></i><span id="nHomeL">Home</span></button><button id="nProf" type="button"><i class="fa-regular fa-user"></i>Profile</button></div></nav>
+</div>
+
+<!-- Product details -->
+<div id="mDet" class="modal hidden" role="dialog" aria-modal="true"><div class="sheet">
+ <div id="dEm" class="big"></div><h2 id="dName"></h2><p class="sub" id="dCat"></p>
+ <p id="dDesc" style="margin:10px 0 0"></p><p id="dItems" style="margin:8px 0 0;font-weight:600"></p>
+ <div class="price" id="dPrice" style="font-size:1.6rem"></div>
+ <button id="dClose" class="btn sec" type="button">Close</button>
+</div></div>
+
+<!-- Add / edit item (admin) -->
+<div id="mEdit" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="eT"><div class="sheet">
+ <h2 id="eT">Add item</h2>
+ <div class="r2"><div><label for="eName">Name</label><input id="eName"></div><div><label for="eEm">Emoji</label><input id="eEm" placeholder="🍱" maxlength="4"></div></div>
+ <div class="r2"><div><label for="eCat">Category</label><select id="eCat"></select></div><div><label for="ePrice">Price (PHP)</label><input id="ePrice" type="number" min="0" step="0.5" inputmode="decimal"></div></div>
+ <label for="eDesc">Description</label><textarea id="eDesc"></textarea>
+ <label for="eItems">Bundle contents (for bundles)</label><input id="eItems" placeholder="Rice, Fried Chicken, Iced Tea">
+ <label class="chk"><input id="eBundle" type="checkbox"><span>This is a Baon Bundle</span></label>
+ <label class="chk"><input id="eAvail" type="checkbox" checked><span>Available to customers</span></label>
+ <div id="eMsg" class="msg e" role="alert"></div>
+ <div style="display:flex;gap:10px"><button id="eCancel" class="btn sec" type="button">Cancel</button><button id="eSave" class="btn" type="button">Save</button></div>
+</div></div>
+
+<!-- Privacy -->
+<div id="mPriv" class="modal hidden" role="dialog" aria-modal="true"><div class="sheet">
+ <h2>Data Privacy Notice</h2>
+ <p><b>What we collect.</b> Your name, mobile number, address, email, and your orders.</p>
+ <p><b>Why.</b> To create your account, prepare and deliver your orders, and contact you about them.</p>
+ <p><b>Who sees it.</b> Only the Baon Box owner and staff. Your data is stored with Google Firebase.</p>
+ <p><b>Your rights.</b> You may ask to access, correct, or delete your data at any time.</p>
+ <button id="pClose" class="btn" type="button">Close</button>
+</div></div>
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail,sendEmailVerification} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getFirestore,doc,setDoc,getDoc,addDoc,updateDoc,deleteDoc,collection,onSnapshot,writeBatch,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+// ===== Paste YOUR Firebase web config here (Project settings > Your apps > Web app) =====
+const firebaseConfig = {
+  apiKey: "AIzaSyBQXn0F2_pxCpCkAhIf0SxQe979Jdfvy2o",
+  authDomain: "baonbox-9ccd1.firebaseapp.com",
+  projectId: "baonbox-9ccd1",
+  storageBucket: "baonbox-9ccd1.firebasestorage.app",
+  messagingSenderId: "1059427762750",
+  appId: "1:1059427762750:web:977f1bdf13352c1c26476f"
+};
+// ========================================================================================
+
+const CATS=["Rice Meals","Snacks","Drinks","Desserts","Budget Bundles"];
+const SAMPLE=[["Chicken Meal","🍗","Rice Meals",85,"Crispy fried chicken with garlic rice.",0,""],["Pork Sisig Meal","🍛","Rice Meals",90,"Sizzling pork sisig with rice.",0,""],["Tapsilog","🍳","Rice Meals",75,"Beef tapa, garlic rice, and fried egg.",0,""],["Spaghetti Meal","🍝","Rice Meals",75,"Sweet-style spaghetti with a hotdog.",0,""],["Fishball Cup","🍢","Snacks",25,"Street-style fishballs with sauce.",0,""],["Banana Cue","🍌","Snacks",20,"Caramelized saba on a stick.",0,""],["Iced Tea","🧋","Drinks",25,"Cold, refreshing house iced tea.",0,""],["Bottled Water","💧","Drinks",15,"500ml purified water.",0,""],["Halo-Halo Cup","🍧","Desserts",45,"Shaved ice with sweet toppings.",0,""],["Baon Student Bundle","🍱","Budget Bundles",99,"A full meal that fits a student budget.",1,"Rice, Fried Chicken, Iced Tea"],["Office Lunch Bundle","🥡","Budget Bundles",129,"A filling lunch set for workers.",1,"Rice, Pork Sisig, Soft Drink, Banana Cue"]];
+
+let app,auth,db;
+const $=id=>document.getElementById(id);
+const setup=firebaseConfig.apiKey!=="PALITAN_DITO";
+if(setup){app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app)}
+const esc=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const peso=n=>"₱"+Number(n||0).toLocaleString("en-PH",{maximumFractionDigits:2});
+let prods=[],cat="All",role="customer",unsub=null,registering=false,editId=null,me=null;
+
+function toast(t){const e=$("toast");e.textContent=t;e.classList.remove("hidden");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hidden"),3000)}
+function msg(el,t,c){el.textContent=t;el.className="msg "+(c||"")}
+function err(e){const m={"auth/email-already-in-use":"An account with this email already exists.","auth/invalid-email":"That email address is not valid.","auth/weak-password":"Password is too weak. Use at least 6 characters.","auth/invalid-credential":"Incorrect email or password.","auth/wrong-password":"Incorrect password.","auth/user-not-found":"Incorrect email or password.","auth/too-many-requests":"Too many attempts. Try again later.","auth/network-request-failed":"No internet connection.","permission-denied":"Permission denied. Check your Firestore Rules."};return m[e.code]||"Error: "+(e.code||e.message)}
+if(!setup)msg($("aMsg"),"Setup needed: paste your Firebase config into baonbox.html (search for PALITAN_DITO).","e");
+
+/* auth */
+function tab(l){$("fLogin").classList.toggle("hidden",!l);$("fReg").classList.toggle("hidden",l);$("tLogin").classList.toggle("on",l);$("tReg").classList.toggle("on",!l);if(setup)msg($("aMsg"),"")}
+$("tLogin").onclick=()=>tab(true);$("tReg").onclick=()=>tab(false);
+$("bPriv").onclick=()=>$("mPriv").classList.remove("hidden");$("pClose").onclick=()=>$("mPriv").classList.add("hidden");
+$("bLogin").onclick=async()=>{if(!setup)return;const e=$("lEmail").value.trim(),p=$("lPw").value;if(!e||!p)return msg($("aMsg"),"Enter your email and password.","e");
+ const b=$("bLogin");b.disabled=true;msg($("aMsg"),"Logging in...");
+ try{await signInWithEmailAndPassword(auth,e,p);msg($("aMsg"),"")}catch(x){msg($("aMsg"),err(x),"e")}finally{b.disabled=false}};
+$("bForgot").onclick=async()=>{if(!setup)return;const e=$("lEmail").value.trim();if(!e)return msg($("aMsg"),"Enter your email first, then click again.","e");
+ try{await sendPasswordResetEmail(auth,e);msg($("aMsg"),"Password reset link sent to your email.","o")}catch(x){msg($("aMsg"),err(x),"e")}};
+$("bReg").onclick=async()=>{if(!setup)return;const f=$("rFirst").value.trim(),l=$("rLast").value.trim(),ph=$("rPhone").value.trim(),ad=$("rAddr").value.trim(),e=$("rEmail").value.trim(),p=$("rPw").value;
+ if(!f||!l||!ph||!ad||!e||!p)return msg($("aMsg"),"Please fill in all fields.","e");
+ if(p!==$("rPw2").value)return msg($("aMsg"),"Passwords do not match.","e");
+ if(!$("rConsent").checked)return msg($("aMsg"),"Please agree to the Data Privacy Notice.","e");
+ const b=$("bReg");b.disabled=true;msg($("aMsg"),"Creating account...");registering=true;
+ try{const c=await createUserWithEmailAndPassword(auth,e,p);
+  await setDoc(doc(db,"users",c.user.uid),{firstName:f,lastName:l,phone:ph,address:ad,email:e,role:"customer",consent:true,consentVersion:"1.0",consentAt:serverTimestamp(),createdAt:serverTimestamp()});
+  try{await sendEmailVerification(c.user)}catch(x){}
+  registering=false;await route(c.user);msg($("aMsg"),"")}
+ catch(x){registering=false;msg($("aMsg"),err(x),"e")}finally{b.disabled=false}};
+$("bOut").onclick=()=>signOut(auth);
+$("bResend").onclick=async()=>{try{await sendEmailVerification(auth.currentUser);toast("Verification email sent.")}catch(x){toast(x.code==="auth/too-many-requests"?"Please wait a few minutes.":err(x))}};
+$("bVerified").onclick=async()=>{const u=auth.currentUser;await u.reload();if(!u.emailVerified)return toast("Not verified yet. Click the link in your email first.");await u.getIdToken(true);toast("Email verified!");route(u)};
+
+/* routing by role */
+async function route(u){
+ let p=null;try{const s=await getDoc(doc(db,"users",u.uid));p=s.exists()?s.data():null}catch(e){}
+ if(!p){toast("Account profile not found.");await signOut(auth);return}
+ role=p.role==="admin"?"admin":"customer";me=p;
+ const nm=((p.firstName||"")+" "+(p.lastName||"")).trim()||u.email,ini=nm.charAt(0).toUpperCase();
+ $("avTop").textContent=ini;$("avBig").textContent=ini;$("pName").textContent=nm;$("pMail").textContent=u.email;$("pRole").textContent=role==="admin"?"Admin":"Customer";
+ $("pInfo").textContent=role==="admin"?"You can manage the menu from the Menu tab.":(p.address||"");
+ $("hiName").textContent=role==="admin"?"Menu manager":"Hi, "+(p.firstName||"there")+"!";
+ $("hiSub").textContent=role==="admin"?"Add, edit, hide, or remove items.":"What's for baon today?";
+ $("nHomeL").textContent=role==="admin"?"Menu":"Home";
+ ["bAdd","bSample"].forEach(i=>$(i).classList.toggle("hidden",role!=="admin"));
+ $("vBanner").classList.toggle("hidden",role==="admin"||u.emailVerified);
+ $("auth").classList.add("hidden");$("app").classList.remove("hidden");go("home");
+ if(unsub)unsub();
+ unsub=onSnapshot(collection(db,"products"),s=>{prods=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},()=>toast("Could not load the menu. Check your Firestore Rules."));
+}
+if(setup)onAuthStateChanged(auth,u=>{if(registering)return;
+ if(!u){if(unsub){unsub();unsub=null}prods=[];$("app").classList.add("hidden");$("auth").classList.remove("hidden");return}
+ route(u)});
+
+/* nav */
+function go(v){$("vHome").classList.toggle("hidden",v!=="home");$("vProf").classList.toggle("hidden",v!=="prof");$("nHome").classList.toggle("on",v==="home");$("nProf").classList.toggle("on",v==="prof");window.scrollTo(0,0)}
+$("nHome").onclick=()=>go("home");$("nProf").onclick=()=>go("prof");
+
+/* browse */
+function chips(){$("chips").innerHTML=["All"].concat(CATS).map(c=>'<button class="chip'+(c===cat?" on":"")+'" data-c="'+esc(c)+'" type="button">'+esc(c)+"</button>").join("")}
+$("chips").onclick=e=>{const b=e.target.closest("button[data-c]");if(!b)return;cat=b.dataset.c;chips();render()};
+$("q").oninput=render;$("sort").onchange=render;
+function render(){
+ const q=$("q").value.trim().toLowerCase();
+ let a=prods.filter(p=>role==="admin"||p.available!==false).filter(p=>cat==="All"||p.category===cat).filter(p=>!q||((p.name||"")+" "+(p.description||"")+" "+(p.category||"")).toLowerCase().includes(q));
+ a.sort((x,y)=>$("sort").value==="low"?(x.price||0)-(y.price||0):(x.category||"").localeCompare(y.category||"")||(x.name||"").localeCompare(y.name||""));
+ $("count").textContent=a.length+(a.length===1?" item":" items");
+ $("grid").innerHTML=a.length?a.map(p=>'<div class="pc'+(p.available===false?" off":"")+'" data-id="'+esc(p.id)+'"><div class="em">'+esc(p.emoji||"🍱")+"</div>"+(p.isBundle?'<span class="tag">Bundle</span>':"")+(p.available===false?'<span class="tag g">Hidden</span>':"")+
+  '<div class="pb"><b>'+esc(p.name)+"</b><small>"+esc(p.category)+'</small><span class="price">'+peso(p.price)+"</span></div>"+
+  (role==="admin"?'<div class="acts"><button data-a="edit" aria-label="Edit"><i class="fa-solid fa-pen"></i></button><button data-a="tog" aria-label="Show or hide"><i class="fa-solid '+(p.available===false?"fa-eye":"fa-eye-slash")+'"></i></button><button data-a="del" class="d" aria-label="Delete"><i class="fa-solid fa-trash"></i></button></div>':"")+"</div>").join(""):
+  '<div class="empty">'+(prods.length?"No items match your search.":role==="admin"?"No menu items yet. Tap Add item or Load sample menu.":"The menu is empty for now. Please check back soon!")+"</div>"}
+chips();
+
+$("grid").onclick=async e=>{const c=e.target.closest(".pc");if(!c)return;const p=prods.find(x=>x.id===c.dataset.id);if(!p)return;const a=e.target.closest("button[data-a]");
+ if(a&&role==="admin"){
+  if(a.dataset.a==="edit")return openEdit(p);
+  if(a.dataset.a==="tog"){try{await updateDoc(doc(db,"products",p.id),{available:p.available===false});toast(p.available===false?"Item is now visible.":"Item is now hidden.")}catch(x){toast(err(x))}return}
+  if(a.dataset.a==="del"){if(confirm('Delete "'+p.name+'"? This cannot be undone.')){try{await deleteDoc(doc(db,"products",p.id));toast("Item deleted.")}catch(x){toast(err(x))}}return}}
+ $("dEm").textContent=p.emoji||"🍱";$("dName").textContent=p.name;$("dCat").textContent=p.category+(p.isBundle?" - Baon Bundle":"");
+ $("dDesc").textContent=p.description||"";$("dItems").textContent=p.isBundle&&p.bundleItems?"Includes: "+p.bundleItems:"";$("dPrice").textContent=peso(p.price);$("mDet").classList.remove("hidden")};
+$("dClose").onclick=()=>$("mDet").classList.add("hidden");
+
+/* admin: menu management */
+$("eCat").innerHTML=CATS.map(c=>"<option>"+c+"</option>").join("");
+function openEdit(p){editId=p?p.id:null;$("eT").textContent=p?"Edit item":"Add item";
+ $("eName").value=p?p.name:"";$("eEm").value=p?p.emoji||"":"";$("eCat").value=p?p.category:CATS[0];$("ePrice").value=p?p.price:"";
+ $("eDesc").value=p?p.description||"":"";$("eItems").value=p?p.bundleItems||"":"";$("eBundle").checked=p?!!p.isBundle:false;$("eAvail").checked=p?p.available!==false:true;
+ msg($("eMsg"),"","e");$("mEdit").classList.remove("hidden");$("eName").focus()}
+$("bAdd").onclick=()=>openEdit(null);$("eCancel").onclick=()=>$("mEdit").classList.add("hidden");
+$("eSave").onclick=async()=>{if(role!=="admin")return;const n=$("eName").value.trim(),pr=parseFloat($("ePrice").value);
+ if(!n)return msg($("eMsg"),"Please enter a name.","e");if(isNaN(pr)||pr<0)return msg($("eMsg"),"Please enter a valid price.","e");
+ const d={name:n,emoji:$("eEm").value.trim()||"🍱",category:$("eCat").value,price:pr,description:$("eDesc").value.trim(),bundleItems:$("eItems").value.trim(),isBundle:$("eBundle").checked,available:$("eAvail").checked};
+ const b=$("eSave");b.disabled=true;
+ try{if(editId)await updateDoc(doc(db,"products",editId),d);else{d.createdAt=serverTimestamp();await addDoc(collection(db,"products"),d)}
+  $("mEdit").classList.add("hidden");toast(editId?"Item updated.":"Item added.")}
+ catch(x){msg($("eMsg"),err(x),"e")}finally{b.disabled=false}};
+$("bSample").onclick=async()=>{if(role!=="admin")return;if(!confirm("Add 11 sample menu items?"))return;
+ try{const b=writeBatch(db);SAMPLE.forEach(s=>b.set(doc(collection(db,"products")),{name:s[0],emoji:s[1],category:s[2],price:s[3],description:s[4],isBundle:!!s[5],bundleItems:s[6],available:true,createdAt:serverTimestamp()}));await b.commit();toast("Sample menu added.")}
+ catch(x){toast(err(x))}};
+</script>
+</body>
+</html>
