@@ -73,6 +73,28 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
 .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;font-weight:600;padding:11px 20px;border-radius:99px;z-index:70;max-width:92vw;font-size:.9rem}
 .who{text-align:center;padding:30px 0 10px}.who .av{width:78px;height:78px;font-size:2rem;margin:0 auto 10px}
 .rolechip{display:inline-block;background:var(--peach);color:var(--primary);font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:99px;margin-top:4px}
+.nav button{position:relative}
+.bdg{position:absolute;top:4px;left:calc(50% + 6px);background:var(--primary);color:#fff;font-size:.65rem;font-weight:700;min-width:18px;height:18px;border-radius:99px;display:grid;place-items:center;padding:0 5px}
+.add{position:absolute;right:10px;bottom:10px;width:34px;height:34px;border-radius:50%;border:0;background:var(--primary);color:#fff;cursor:pointer}
+.add:hover{background:var(--primary-hover)}
+.row{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px 12px;margin-bottom:10px}
+.row .em{width:56px;height:56px;border-radius:14px;font-size:1.8rem;flex:none}
+.row .mid{flex:1;min-width:0}.row .mid b{display:block;font-size:.92rem}
+.qty{display:flex;align-items:center;gap:8px}.qty button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-weight:700;cursor:pointer}
+.seg{display:flex;gap:8px}.seg label{flex:1;margin:0}.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg span{display:block;text-align:center;padding:11px;border:1.5px solid var(--line);border-radius:14px;font-weight:600;cursor:pointer}
+.seg input:checked+span{border-color:var(--primary);background:var(--peach);color:var(--primary)}
+.bd{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 11px;border-radius:99px}
+.b-Pending{background:#FFF1CC;color:#8a5a00}.b-Preparing{background:var(--peach);color:#B33A00}.b-Ready{background:#DDEBFF;color:#1d4f9a}.b-Completed{background:#DDF3DE;color:var(--green)}.b-Cancelled{background:var(--dangerbg);color:var(--danger)}
+.oc{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:12px}
+.oc .h{display:flex;justify-content:space-between;align-items:center;gap:8px}.oc p{margin:4px 0 0;font-size:.85rem;color:var(--mut)}.oc p b{color:var(--ink)}
+.steps{display:flex;margin:14px 0 4px}.steps div{flex:1;text-align:center;font-size:.65rem;color:var(--mut);position:relative}
+.steps div:before{content:"";display:block;width:14px;height:14px;border-radius:50%;background:var(--line);margin:0 auto 4px;position:relative;z-index:1}
+.steps div:after{content:"";position:absolute;top:6px;left:-50%;width:100%;height:2px;background:var(--line)}.steps div:first-child:after{display:none}
+.steps div.on{color:var(--primary);font-weight:700}.steps div.on:before,.steps div.on:after{background:var(--primary)}
+.tot{display:flex;justify-content:space-between;font-family:Fredoka,sans-serif;font-size:1.25rem;font-weight:600;margin-top:10px}
+.dash{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}.dc{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px}.dc b{display:block;font-family:Fredoka,sans-serif;font-size:1.5rem;color:var(--primary)}.dc small{color:var(--mut);font-weight:600}
+@media(min-width:700px){.dash{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
@@ -110,17 +132,29 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
   <div id="vBanner" class="banner hidden"><span style="flex:1;min-width:180px">Please verify your email to place orders. Check your inbox (and Spam).</span><button id="bResend" class="btn sm" type="button">Resend</button><button id="bVerified" class="btn sm sec" type="button">I verified</button></div>
   <div class="hi"><h2 id="hiName">Hi!</h2><p id="hiSub">What's for baon today?</p></div>
   <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="q" type="search" placeholder="Search meals, snacks, drinks..." aria-label="Search"></div>
+  <div id="budBox" class="card" style="padding:14px;margin:12px 0 0"><label for="budget" style="margin:0 0 6px"><i class="fa-solid fa-wallet o"></i> My budget (optional)</label><div style="display:flex;gap:8px"><input id="budget" type="number" min="0" inputmode="numeric" placeholder="Example: 120"><button id="bBudClr" class="btn sm sec" type="button">Clear</button></div><div id="combo"></div></div>
   <div id="chips" class="chips" role="tablist"></div>
   <div class="bar"><b id="count"></b>
    <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="bAdd" class="btn sm hidden" type="button"><i class="fa-solid fa-plus"></i> Add item</button><button id="bSample" class="btn sm sec hidden" type="button">Load sample menu</button>
    <select id="sort" aria-label="Sort"><option value="">Sort: Default</option><option value="low">Price: Low to high</option></select></div></div>
   <div id="grid" class="grid"></div>
  </div>
+ <div id="vCart" class="wrap hidden"><div class="top"><span class="brand">Your <span class="o">Cart</span></span></div>
+  <div id="cartList"></div>
+  <div class="card"><div class="tot" style="margin:0"><span>Total</span><span id="cartTot" class="o">₱0</span></div><button id="bCheck" class="btn" type="button">Checkout</button></div>
+ </div>
+ <div id="vOrders" class="wrap hidden"><div class="top"><span class="brand">Your <span class="o">Orders</span></span></div>
+  <div id="dash" class="dash hidden"></div>
+  <div id="oBar" class="bar hidden"><input id="oQ" type="search" placeholder="Search customer or phone" style="flex:1;min-width:160px;border-radius:99px" aria-label="Search orders"><select id="oStatus" aria-label="Filter by status"><option value="">All statuses</option><option>Pending</option><option>Preparing</option><option>Ready</option><option>Completed</option><option>Cancelled</option></select></div>
+  <div id="oList"></div>
+ </div>
  <div id="vProf" class="wrap hidden">
   <div class="who"><div id="avBig" class="av">B</div><h2 id="pName"></h2><p id="pMail" class="sub"></p><span id="pRole" class="rolechip"></span></div>
-  <div class="card" style="margin-top:14px"><b>Account</b><p class="sub" id="pInfo"></p><button id="bOut" class="btn sec" type="button"><i class="fa-solid fa-right-from-bracket"></i> Log out</button></div>
+  <div class="card" style="margin-top:14px"><b>Account</b><p class="sub" id="pInfo"></p><button id="bAdmin" class="btn sec hidden" type="button"><i class="fa-solid fa-user-plus"></i> Add admin account</button>
+  <button id="bOut" class="btn sec" type="button"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+  <button id="bDel" class="btn sec" type="button" style="color:var(--danger)"><i class="fa-solid fa-trash"></i> Delete account</button></div>
  </div>
- <nav class="nav"><div><button id="nHome" class="on" type="button"><i class="fa-solid fa-house"></i><span id="nHomeL">Home</span></button><button id="nProf" type="button"><i class="fa-regular fa-user"></i>Profile</button></div></nav>
+ <nav class="nav"><div><button id="nHome" class="on" type="button"><i class="fa-solid fa-house"></i><span id="nHomeL">Home</span></button><button id="nCart" type="button"><i class="fa-solid fa-cart-shopping"></i>Cart<span id="cBdg" class="bdg hidden">0</span></button><button id="nOrd" type="button"><i class="fa-solid fa-receipt"></i>Orders<span id="oBdg" class="bdg hidden">0</span></button><button id="nProf" type="button"><i class="fa-regular fa-user"></i>Profile</button></div></nav>
 </div>
 
 <!-- Product details -->
@@ -128,6 +162,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
  <div id="dEm" class="big"></div><h2 id="dName"></h2><p class="sub" id="dCat"></p>
  <p id="dDesc" style="margin:10px 0 0"></p><p id="dItems" style="margin:8px 0 0;font-weight:600"></p>
  <div class="price" id="dPrice" style="font-size:1.6rem"></div>
+ <button id="dAdd" class="btn" type="button"><i class="fa-solid fa-cart-plus"></i> Add to cart</button>
  <button id="dClose" class="btn sec" type="button">Close</button>
 </div></div>
 
@@ -144,6 +179,33 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
  <div style="display:flex;gap:10px"><button id="eCancel" class="btn sec" type="button">Cancel</button><button id="eSave" class="btn" type="button">Save</button></div>
 </div></div>
 
+<div id="mChk" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="kT"><div class="sheet">
+ <h2 id="kT">Checkout</h2>
+ <label>How would you like to get your order?</label>
+ <div class="seg"><label><input type="radio" name="ff" value="Pickup" checked><span>Pickup</span></label><label><input type="radio" name="ff" value="Delivery"><span>Delivery</span></label></div>
+ <label for="cPhone">Contact number</label><input id="cPhone" type="tel">
+ <div id="cAddrBox" class="hidden"><label for="cAddr">Delivery address</label><input id="cAddr"></div>
+ <label for="cNotes">Notes (optional)</label><textarea id="cNotes" placeholder="Example: No onions, please"></textarea>
+ <p class="sub" style="margin-top:12px">Payment: Cash on pickup or delivery</p>
+ <div class="tot"><span>Total</span><span id="cSum" class="o"></span></div>
+ <div id="cMsg" class="msg e" role="alert"></div>
+ <div style="display:flex;gap:10px"><button id="cCancel" class="btn sec" type="button">Back</button><button id="cPlace" class="btn" type="button">Place order</button></div>
+</div></div>
+<div id="mDel" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="xT"><div class="sheet">
+ <h2 id="xT">Delete your account?</h2>
+ <p class="sub">This permanently deletes your account, your profile, and your orders. This cannot be undone.</p>
+ <label for="dPw">Enter your password to confirm</label><input id="dPw" type="password" autocomplete="current-password">
+ <div id="dMsg" class="msg e" role="alert"></div>
+ <div style="display:flex;gap:10px"><button id="dCancel" class="btn sec" type="button">Cancel</button><button id="dOk" class="btn" type="button" style="background:var(--danger)">Delete forever</button></div>
+</div></div>
+<div id="mAdm" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="yT"><div class="sheet">
+ <h2 id="yT">Add admin account</h2>
+ <p class="sub">The new admin will receive an email to set their own password.</p>
+ <div class="r2"><div><label for="aFirst">First name</label><input id="aFirst"></div><div><label for="aLast">Last name</label><input id="aLast"></div></div>
+ <label for="aEmail">Email</label><input id="aEmail" type="email">
+ <div id="aaMsg" class="msg" role="status" aria-live="polite"></div>
+ <div style="display:flex;gap:10px"><button id="aaCancel" class="btn sec" type="button">Close</button><button id="aaOk" class="btn" type="button">Create</button></div>
+</div></div>
 <!-- Privacy -->
 <div id="mPriv" class="modal hidden" role="dialog" aria-modal="true"><div class="sheet">
  <h2>Data Privacy Notice</h2>
@@ -156,19 +218,13 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
 <div id="toast" class="toast hidden" role="status"></div>
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail,sendEmailVerification} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {getFirestore,doc,setDoc,getDoc,addDoc,updateDoc,deleteDoc,collection,onSnapshot,writeBatch,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {initializeApp,deleteApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail,sendEmailVerification,reauthenticateWithCredential,EmailAuthProvider,deleteUser} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getFirestore,doc,setDoc,getDoc,addDoc,updateDoc,deleteDoc,collection,query,where,getDocs,onSnapshot,writeBatch,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/+esm";
 
 // ===== Paste YOUR Firebase web config here (Project settings > Your apps > Web app) =====
-const firebaseConfig = {
-  apiKey: "AIzaSyBQXn0F2_pxCpCkAhIf0SxQe979Jdfvy2o",
-  authDomain: "baonbox-9ccd1.firebaseapp.com",
-  projectId: "baonbox-9ccd1",
-  storageBucket: "baonbox-9ccd1.firebasestorage.app",
-  messagingSenderId: "1059427762750",
-  appId: "1:1059427762750:web:977f1bdf13352c1c26476f"
-};
+const firebaseConfig={apiKey:"AIzaSyBQXn0F2_pxCpCkAhIf0SxQe979Jdfvy2o",authDomain:"baonbox-9ccd1.firebaseapp.com",projectId:"baonbox-9ccd1",storageBucket:"baonbox-9ccd1.firebasestorage.app",messagingSenderId:"1059427762750",appId:"1:1059427762750:web:977f1bdf13352c1c26476f"};
 // ========================================================================================
 
 const CATS=["Rice Meals","Snacks","Drinks","Desserts","Budget Bundles"];
@@ -220,20 +276,22 @@ async function route(u){
  $("pInfo").textContent=role==="admin"?"You can manage the menu from the Menu tab.":(p.address||"");
  $("hiName").textContent=role==="admin"?"Menu manager":"Hi, "+(p.firstName||"there")+"!";
  $("hiSub").textContent=role==="admin"?"Add, edit, hide, or remove items.":"What's for baon today?";
- $("nHomeL").textContent=role==="admin"?"Menu":"Home";
+ $("nHomeL").textContent=role==="admin"?"Menu":"Home";$("nCart").classList.toggle("hidden",role==="admin");$("oBar").classList.toggle("hidden",role!=="admin");$("dash").classList.toggle("hidden",role!=="admin");$("budBox").classList.toggle("hidden",role==="admin");$("bAdmin").classList.toggle("hidden",role!=="admin");
  ["bAdd","bSample"].forEach(i=>$(i).classList.toggle("hidden",role!=="admin"));
  $("vBanner").classList.toggle("hidden",role==="admin"||u.emailVerified);
  $("auth").classList.add("hidden");$("app").classList.remove("hidden");go("home");
  if(unsub)unsub();
- unsub=onSnapshot(collection(db,"products"),s=>{prods=s.docs.map(d=>Object.assign({id:d.id},d.data()));render()},()=>toast("Could not load the menu. Check your Firestore Rules."));
+ unsub=onSnapshot(collection(db,"products"),s=>{prods=s.docs.map(d=>Object.assign({id:d.id},d.data()));render();paintCart()},()=>toast("Could not load the menu. Check your Firestore Rules."));
+ listenOrders(u);
 }
 if(setup)onAuthStateChanged(auth,u=>{if(registering)return;
- if(!u){if(unsub){unsub();unsub=null}prods=[];$("app").classList.add("hidden");$("auth").classList.remove("hidden");return}
+ if(!u){if(unsub){unsub();unsub=null}if(unsubO){unsubO();unsubO=null}prods=[];orders=[];$("app").classList.add("hidden");$("auth").classList.remove("hidden");return}
  route(u)});
 
 /* nav */
-function go(v){$("vHome").classList.toggle("hidden",v!=="home");$("vProf").classList.toggle("hidden",v!=="prof");$("nHome").classList.toggle("on",v==="home");$("nProf").classList.toggle("on",v==="prof");window.scrollTo(0,0)}
-$("nHome").onclick=()=>go("home");$("nProf").onclick=()=>go("prof");
+const VIEW={home:"vHome",cart:"vCart",ord:"vOrders",prof:"vProf"},NAVB={home:"nHome",cart:"nCart",ord:"nOrd",prof:"nProf"};
+function go(v){Object.keys(VIEW).forEach(k=>{$(VIEW[k]).classList.toggle("hidden",v!==k);$(NAVB[k]).classList.toggle("on",v===k)});window.scrollTo(0,0)}
+$("nHome").onclick=()=>go("home");$("nCart").onclick=()=>go("cart");$("nOrd").onclick=()=>go("ord");$("nProf").onclick=()=>go("prof");
 
 /* browse */
 function chips(){$("chips").innerHTML=["All"].concat(CATS).map(c=>'<button class="chip'+(c===cat?" on":"")+'" data-c="'+esc(c)+'" type="button">'+esc(c)+"</button>").join("")}
@@ -241,22 +299,23 @@ $("chips").onclick=e=>{const b=e.target.closest("button[data-c]");if(!b)return;c
 $("q").oninput=render;$("sort").onchange=render;
 function render(){
  const q=$("q").value.trim().toLowerCase();
- let a=prods.filter(p=>role==="admin"||p.available!==false).filter(p=>cat==="All"||p.category===cat).filter(p=>!q||((p.name||"")+" "+(p.description||"")+" "+(p.category||"")).toLowerCase().includes(q));
+ let a=prods.filter(p=>role==="admin"||p.available!==false).filter(p=>cat==="All"||p.category===cat).filter(p=>!budget||Number(p.price)<=budget).filter(p=>!q||((p.name||"")+" "+(p.description||"")+" "+(p.category||"")).toLowerCase().includes(q));
  a.sort((x,y)=>$("sort").value==="low"?(x.price||0)-(y.price||0):(x.category||"").localeCompare(y.category||"")||(x.name||"").localeCompare(y.name||""));
- $("count").textContent=a.length+(a.length===1?" item":" items");
+ $("count").textContent=a.length+(a.length===1?" item":" items");paintCombo();
  $("grid").innerHTML=a.length?a.map(p=>'<div class="pc'+(p.available===false?" off":"")+'" data-id="'+esc(p.id)+'"><div class="em">'+esc(p.emoji||"🍱")+"</div>"+(p.isBundle?'<span class="tag">Bundle</span>':"")+(p.available===false?'<span class="tag g">Hidden</span>':"")+
   '<div class="pb"><b>'+esc(p.name)+"</b><small>"+esc(p.category)+'</small><span class="price">'+peso(p.price)+"</span></div>"+
-  (role==="admin"?'<div class="acts"><button data-a="edit" aria-label="Edit"><i class="fa-solid fa-pen"></i></button><button data-a="tog" aria-label="Show or hide"><i class="fa-solid '+(p.available===false?"fa-eye":"fa-eye-slash")+'"></i></button><button data-a="del" class="d" aria-label="Delete"><i class="fa-solid fa-trash"></i></button></div>':"")+"</div>").join(""):
+  (role!=="admin"?'<button class="add" data-a="add" aria-label="Add to cart"><i class="fa-solid fa-plus"></i></button>':"")+(role==="admin"?'<div class="acts"><button data-a="edit" aria-label="Edit"><i class="fa-solid fa-pen"></i></button><button data-a="tog" aria-label="Show or hide"><i class="fa-solid '+(p.available===false?"fa-eye":"fa-eye-slash")+'"></i></button><button data-a="del" class="d" aria-label="Delete"><i class="fa-solid fa-trash"></i></button></div>':"")+"</div>").join(""):
   '<div class="empty">'+(prods.length?"No items match your search.":role==="admin"?"No menu items yet. Tap Add item or Load sample menu.":"The menu is empty for now. Please check back soon!")+"</div>"}
 chips();
 
 $("grid").onclick=async e=>{const c=e.target.closest(".pc");if(!c)return;const p=prods.find(x=>x.id===c.dataset.id);if(!p)return;const a=e.target.closest("button[data-a]");
+ if(a&&a.dataset.a==="add"){addCart(p);return}
  if(a&&role==="admin"){
   if(a.dataset.a==="edit")return openEdit(p);
   if(a.dataset.a==="tog"){try{await updateDoc(doc(db,"products",p.id),{available:p.available===false});toast(p.available===false?"Item is now visible.":"Item is now hidden.")}catch(x){toast(err(x))}return}
   if(a.dataset.a==="del"){if(confirm('Delete "'+p.name+'"? This cannot be undone.')){try{await deleteDoc(doc(db,"products",p.id));toast("Item deleted.")}catch(x){toast(err(x))}}return}}
  $("dEm").textContent=p.emoji||"🍱";$("dName").textContent=p.name;$("dCat").textContent=p.category+(p.isBundle?" - Baon Bundle":"");
- $("dDesc").textContent=p.description||"";$("dItems").textContent=p.isBundle&&p.bundleItems?"Includes: "+p.bundleItems:"";$("dPrice").textContent=peso(p.price);$("mDet").classList.remove("hidden")};
+ $("dDesc").textContent=p.description||"";$("dItems").textContent=p.isBundle&&p.bundleItems?"Includes: "+p.bundleItems:"";$("dPrice").textContent=peso(p.price);detP=p;$("dAdd").classList.toggle("hidden",role==="admin");$("mDet").classList.remove("hidden")};
 $("dClose").onclick=()=>$("mDet").classList.add("hidden");
 
 /* admin: menu management */
@@ -276,6 +335,123 @@ $("eSave").onclick=async()=>{if(role!=="admin")return;const n=$("eName").value.t
 $("bSample").onclick=async()=>{if(role!=="admin")return;if(!confirm("Add 11 sample menu items?"))return;
  try{const b=writeBatch(db);SAMPLE.forEach(s=>b.set(doc(collection(db,"products")),{name:s[0],emoji:s[1],category:s[2],price:s[3],description:s[4],isBundle:!!s[5],bundleItems:s[6],available:true,createdAt:serverTimestamp()}));await b.commit();toast("Sample menu added.")}
  catch(x){toast(err(x))}};
+
+/* ---------- cart ---------- */
+let orders=[],unsubO=null,detP=null,firstO=true;
+const STEPS=["Pending","Preparing","Ready","Completed"],ALLS=STEPS.concat(["Cancelled"]);
+let cart={};try{cart=JSON.parse(localStorage.getItem("bbCart")||"{}")||{}}catch(e){cart={}}
+const saveCart=()=>{try{localStorage.setItem("bbCart",JSON.stringify(cart))}catch(e){}};
+const myName=()=>me?((me.firstName||"")+" "+(me.lastName||"")).trim():"";
+function lines(){return Object.keys(cart).map(id=>{const p=prods.find(x=>x.id===id);return p&&p.available!==false?{p:p,qty:cart[id].qty}:null}).filter(Boolean)}
+const total=()=>lines().reduce((a,l)=>a+Number(l.p.price||0)*l.qty,0);
+function addCart(p){cart[p.id]={qty:(cart[p.id]?cart[p.id].qty:0)+1};saveCart();paintCart();toast(p.name+" added to cart")}
+$("dAdd").onclick=()=>{if(detP){addCart(detP);$("mDet").classList.add("hidden")}};
+function paintCart(){const L=lines(),n=L.reduce((a,l)=>a+l.qty,0),b=$("cBdg");b.textContent=n;b.classList.toggle("hidden",!n);
+ $("cartList").innerHTML=L.length?L.map(l=>'<div class="row"><div class="em">'+esc(l.p.emoji||"🍱")+'</div><div class="mid"><b>'+esc(l.p.name)+'</b><span class="price">'+peso(l.p.price)+'</span></div><div class="qty"><button data-id="'+esc(l.p.id)+'" data-d="-1" aria-label="Decrease">-</button><b>'+l.qty+'</b><button data-id="'+esc(l.p.id)+'" data-d="1" aria-label="Increase">+</button></div></div>').join(""):'<div class="empty">Your cart is empty. Browse the menu and tap + to add meals.</div>';
+ $("cartTot").textContent=peso(total());$("bCheck").disabled=!L.length}
+$("cartList").onclick=e=>{const b=e.target.closest("button[data-id]");if(!b)return;const id=b.dataset.id,q=(cart[id]?cart[id].qty:0)+Number(b.dataset.d);if(q<=0)delete cart[id];else cart[id]={qty:q};saveCart();paintCart()};
+
+/* ---------- checkout ---------- */
+function ff(){$("cAddrBox").classList.toggle("hidden",document.querySelector("input[name=ff]:checked").value!=="Delivery")}
+document.querySelectorAll("input[name=ff]").forEach(r=>r.onchange=ff);
+$("bCheck").onclick=()=>{if(!lines().length)return;$("cPhone").value=me&&me.phone||"";$("cAddr").value=me&&me.address||"";$("cNotes").value="";msg($("cMsg"),"","e");ff();$("cSum").textContent=peso(total());$("mChk").classList.remove("hidden")};
+$("cCancel").onclick=()=>$("mChk").classList.add("hidden");
+$("cPlace").onclick=async()=>{const u=auth.currentUser;if(!u)return;
+ if(!u.emailVerified)return msg($("cMsg"),"Please verify your email first. Use the banner on the Home tab.","e");
+ const L=lines();if(!L.length)return msg($("cMsg"),"Your cart is empty.","e");
+ const f=document.querySelector("input[name=ff]:checked").value,ph=$("cPhone").value.trim(),ad=$("cAddr").value.trim();
+ if(!ph)return msg($("cMsg"),"Please enter a contact number.","e");
+ if(f==="Delivery"&&!ad)return msg($("cMsg"),"Please enter a delivery address.","e");
+ const b=$("cPlace");b.disabled=true;msg($("cMsg"),"Placing order...");
+ try{const dr=await addDoc(collection(db,"orders"),{uid:u.uid,customerName:myName(),phone:ph,address:f==="Delivery"?ad:"",items:L.map(l=>({productId:l.p.id,name:l.p.name,price:Number(l.p.price),qty:l.qty})),total:L.reduce((a,l)=>a+Number(l.p.price)*l.qty,0),fulfillment:f,notes:$("cNotes").value.trim(),paymentMethod:"Cash on pickup/delivery",email:u.email||"",status:"Pending",createdAt:serverTimestamp()});
+  notifyAdmin(dr.id,L,f,ph,ad,u);cart={};saveCart();paintCart();$("mChk").classList.add("hidden");go("ord");toast("Order placed! We will prepare it soon.")}
+ catch(x){msg($("cMsg"),err(x),"e")}finally{b.disabled=false}};
+
+/* ---------- orders: customer tracking + admin management ---------- */
+const od=t=>t&&t.toDate?t.toDate().toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):"";
+const tm=t=>t&&t.toMillis?t.toMillis():Date.now();
+function beep(){try{const C=window.AudioContext||window.webkitAudioContext,x=new C(),o=x.createOscillator(),g=x.createGain();o.connect(g);g.connect(x.destination);o.frequency.value=880;g.gain.value=.08;o.start();o.stop(x.currentTime+.18)}catch(e){}}
+function listenOrders(u){if(unsubO)unsubO();firstO=true;orders=[];
+ const ref=role==="admin"?collection(db,"orders"):query(collection(db,"orders"),where("uid","==",u.uid));
+ unsubO=onSnapshot(ref,s=>{orders=s.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>tm(b.createdAt)-tm(a.createdAt));
+  if(role==="admin"&&!firstO&&s.docChanges().some(c=>c.type==="added"&&!c.doc.metadata.hasPendingWrites)){toast("New order received!");beep()}
+  firstO=false;paintOrders()},()=>{$("oList").innerHTML='<div class="empty">Could not load orders. Check your Firestore Rules.</div>'})}
+function paintOrders(){const adm=role==="admin",pend=orders.filter(o=>o.status==="Pending").length,nb=$("oBdg");nb.textContent=pend;nb.classList.toggle("hidden",!adm||!pend);if(adm)paintDash();
+ const q=$("oQ").value.trim().toLowerCase(),fs=$("oStatus").value;
+ const a=adm?orders.filter(o=>(!fs||o.status===fs)&&(!q||((o.customerName||"")+" "+(o.phone||"")).toLowerCase().includes(q))):orders;
+ $("oList").innerHTML=a.length?a.map(o=>ocard(o,adm)).join(""):'<div class="empty">'+(orders.length?"No orders match your filters.":adm?"No orders yet.":"You have no orders yet. Place your first order from the Home tab.")+"</div>"}
+function ocard(o,adm){const items=(o.items||[]).map(i=>"<p>"+i.qty+" x "+esc(i.name)+" - "+peso(i.price*i.qty)+"</p>").join("");
+ let h='<div class="oc"><div class="h"><b>Order #'+esc(o.id.slice(0,6).toUpperCase())+'</b><span class="bd b-'+esc(o.status)+'">'+esc(o.status)+"</span></div><p>"+esc(od(o.createdAt))+" - "+esc(o.fulfillment)+"</p>";
+ if(adm)h+="<p><b>"+esc(o.customerName)+"</b> - "+esc(o.phone)+"</p>"+(o.address?"<p><b>Address:</b> "+esc(o.address)+"</p>":"");
+ h+=items+(o.notes?"<p><b>Notes:</b> "+esc(o.notes)+"</p>":"")+'<div class="tot"><span>Total</span><span class="o">'+peso(o.total)+"</span></div><p>"+esc(o.paymentMethod)+"</p>";
+ if(!adm&&o.status!=="Cancelled"){const i=STEPS.indexOf(o.status);h+='<div class="steps">'+STEPS.map((s,k)=>'<div class="'+(k<=i?"on":"")+'">'+s+"</div>").join("")+"</div>"}
+ if(adm)h+='<label>Update status</label><select data-oid="'+esc(o.id)+'">'+ALLS.map(s=>"<option"+(s===o.status?" selected":"")+">"+s+"</option>").join("")+"</select>"+(o.updatedBy?"<p>Updated by "+esc(o.updatedBy)+" - "+esc(od(o.updatedAt))+"</p>":"");
+ else h+='<div style="display:flex;gap:8px;margin-top:10px">'+(o.status==="Pending"?'<button class="btn sec sm" data-cx="'+esc(o.id)+'" type="button">Cancel order</button>':"")+'<button class="btn sm" data-re="'+esc(o.id)+'" type="button">Reorder</button></div>';
+ return h+"</div>"}
+$("oQ").oninput=paintOrders;$("oStatus").onchange=paintOrders;
+$("oList").onclick=async e=>{const c=e.target.closest("button[data-cx]"),r=e.target.closest("button[data-re]");
+ if(c){if(!confirm("Cancel this order?"))return;try{await updateDoc(doc(db,"orders",c.dataset.cx),{status:"Cancelled",cancelledAt:serverTimestamp()});toast("Order cancelled.")}catch(x){toast(err(x))}}
+ if(r){const o=orders.find(x=>x.id===r.dataset.re);if(!o)return;let n=0;(o.items||[]).forEach(i=>{const p=prods.find(x=>x.id===i.productId);if(p&&p.available!==false){cart[p.id]={qty:(cart[p.id]?cart[p.id].qty:0)+i.qty};n++}});saveCart();paintCart();toast(n?"Items added to your cart.":"Those items are no longer available.");if(n)go("cart")}};
+$("oList").onchange=async e=>{const s=e.target.closest("select[data-oid]");if(!s||role!=="admin")return;s.disabled=true;
+ try{await updateDoc(doc(db,"orders",s.dataset.oid),{status:s.value,updatedBy:myName(),updatedByUid:auth.currentUser.uid,updatedAt:serverTimestamp()});toast("Status updated to "+s.value);notifyCustomer(orders.find(x=>x.id===s.dataset.oid),s.value)}
+ catch(x){toast(err(x))}finally{s.disabled=false}};
+/* ---------- budget-based selection ---------- */
+let budget=0;
+$("budget").oninput=()=>{budget=Math.max(0,parseFloat($("budget").value)||0);render()};
+$("bBudClr").onclick=()=>{$("budget").value="";budget=0;render()};
+function paintCombo(){const el=$("combo");if(!budget){el.innerHTML="";return}
+ const av=prods.filter(p=>p.available!==false),by=(cs,max)=>av.filter(p=>cs.includes(p.category)&&Number(p.price)<=max).sort((a,b)=>b.price-a.price)[0];
+ const m=by(["Rice Meals","Budget Bundles"],budget);
+ if(!m){el.innerHTML='<p class="sub" style="margin-top:10px">Nothing fits this budget yet. Try a higher amount.</p>';return}
+ let rem=budget-m.price;const pick=[m],d=by(["Drinks"],rem);if(d){pick.push(d);rem-=d.price}const sn=by(["Snacks","Desserts"],rem);if(sn){pick.push(sn);rem-=sn.price}
+ el.innerHTML='<p style="margin:12px 0 4px;font-weight:700">Suggested combo</p><p style="margin:0">'+pick.map(p=>esc(p.emoji||"🍱")+" "+esc(p.name)).join(" + ")+'</p><p class="sub">Total '+peso(budget-rem)+" - "+peso(rem)+' left</p><button id="bCombo" class="btn sm" type="button" style="margin-top:8px"><i class="fa-solid fa-cart-plus"></i> Add combo to cart</button>';
+ $("bCombo").onclick=()=>{pick.forEach(p=>{cart[p.id]={qty:(cart[p.id]?cart[p.id].qty:0)+1}});saveCart();paintCart();toast("Combo added to cart")}}
+
+/* ---------- admin dashboard ---------- */
+function paintDash(){const t0=new Date();t0.setHours(0,0,0,0);const t=t0.getTime(),done=orders.filter(o=>o.status==="Completed"),sum=a=>a.reduce((x,o)=>x+Number(o.total||0),0);
+ $("dash").innerHTML=[["Orders today",orders.filter(o=>tm(o.createdAt)>=t).length],["Pending now",orders.filter(o=>o.status==="Pending").length],["Sales today",peso(sum(done.filter(o=>tm(o.createdAt)>=t)))],["Total sales",peso(sum(done))]].map(x=>'<div class="dc"><b>'+x[1]+"</b><small>"+x[0]+"</small></div>").join("")}
+
+/* ---------- emails (EmailJS) ---------- */
+// Create a free account at emailjs.com and paste your values below.
+const EJ_KEY="8VxcGhgNXLP0syRWA",EJ_SERVICE="service_qw0xly2",EJ_ADMIN_TPL="template_w9l8wcb",EJ_CUST_TPL="template_veerraf";
+async function mail(tpl,p){if([EJ_KEY,EJ_SERVICE,tpl].includes("PALITAN_DITO"))return;try{await emailjs.send(EJ_SERVICE,tpl,p,{publicKey:EJ_KEY})}catch(e){console.error("EMAIL ERROR:",e&&(e.text||e.message||e))}}
+const itemsTxt=a=>(a||[]).map(i=>esc(i.qty+" x "+i.name)+" - "+peso(i.price*i.qty)).join("<br>");
+function notifyAdmin(id,L,f,ph,ad,u){mail(EJ_ADMIN_TPL,{order_no:id.slice(0,6).toUpperCase(),customer_name:myName(),customer_email:u.email||"",phone:ph,fulfillment:f,address:ad||"N/A",items_text:itemsTxt(L.map(l=>({qty:l.qty,name:l.p.name,price:l.p.price}))),total:peso(L.reduce((a,l)=>a+Number(l.p.price)*l.qty,0))})}
+function custMsg(o,s){const pk=o.fulfillment==="Pickup";
+ if(s==="Preparing")return"Your order is now being prepared by our kitchen. We will notify you as soon as it is ready.";
+ if(s==="Ready")return pk?"Your order is ready for pickup. Please present your order number when you arrive.":"Your order is ready and will be out for delivery shortly. Please keep your phone nearby.";
+ if(s==="Completed")return"Your order has been completed. Thank you for ordering from Baon Box. We hope you enjoyed your meal.";
+ if(s==="Cancelled")return"Your order has been cancelled. If you did not request this, please contact us so we can assist you.";return""}
+function notifyCustomer(o,s){if(!o||!o.email||s==="Pending")return;mail(EJ_CUST_TPL,{to_email:o.email,customer_name:o.customerName||"Customer",order_no:o.id.slice(0,6).toUpperCase(),status:s,message:custMsg(o,s),items_text:itemsTxt(o.items),total:peso(o.total),fulfillment:o.fulfillment})}
+
+/* ---------- delete account ---------- */
+$("bDel").onclick=()=>{$("dPw").value="";msg($("dMsg"),"","e");$("mDel").classList.remove("hidden");$("dPw").focus()};
+$("dCancel").onclick=()=>$("mDel").classList.add("hidden");
+$("dOk").onclick=async()=>{const u=auth.currentUser,pw=$("dPw").value;if(!u)return;if(!pw)return msg($("dMsg"),"Enter your password.","e");
+ const b=$("dOk");b.disabled=true;msg($("dMsg"),"");
+ try{await reauthenticateWithCredential(u,EmailAuthProvider.credential(u.email,pw))}catch(x){msg($("dMsg"),err(x),"e");b.disabled=false;return}
+ try{if(unsub){unsub();unsub=null}if(unsubO){unsubO();unsubO=null}
+  const q=await getDocs(query(collection(db,"orders"),where("uid","==",u.uid)));
+  let bt=writeBatch(db),n=0;
+  for(const d of q.docs){bt.delete(d.ref);if(++n>=400){await bt.commit();bt=writeBatch(db);n=0}}
+  bt.delete(doc(db,"users",u.uid));await bt.commit();await deleteUser(u);
+  cart={};saveCart();$("mDel").classList.add("hidden");toast("Your account has been deleted.")}
+ catch(x){msg($("dMsg"),err(x),"e");route(u)}finally{b.disabled=false}};
+
+/* ---------- admin: create another admin account ---------- */
+$("bAdmin").onclick=()=>{["aFirst","aLast","aEmail"].forEach(i=>$(i).value="");msg($("aaMsg"),"");$("mAdm").classList.remove("hidden")};
+$("aaCancel").onclick=()=>$("mAdm").classList.add("hidden");
+$("aaOk").onclick=async()=>{if(role!=="admin")return;const f=$("aFirst").value.trim(),l=$("aLast").value.trim(),e=$("aEmail").value.trim();
+ if(!f||!l||!e)return msg($("aaMsg"),"Please fill in all fields.","e");
+ const b=$("aaOk");b.disabled=true;msg($("aaMsg"),"Creating account...");let sapp=null;
+ try{sapp=initializeApp(firebaseConfig,"secondary-"+Date.now());const sa=getAuth(sapp);
+  const pw=Array.from(crypto.getRandomValues(new Uint8Array(20)),x=>x.toString(36)).join("").slice(0,24)+"Aa1!";
+  const c=await createUserWithEmailAndPassword(sa,e,pw);
+  await setDoc(doc(db,"users",c.user.uid),{firstName:f,lastName:l,phone:"",address:"",email:e,role:"admin",createdBy:auth.currentUser.uid,createdAt:serverTimestamp()});
+  await sendPasswordResetEmail(sa,e);await signOut(sa);
+  msg($("aaMsg"),"Account created. A password setup email was sent to "+e+".","o");["aFirst","aLast","aEmail"].forEach(i=>$(i).value="")}
+ catch(x){msg($("aaMsg"),err(x),"e")}finally{b.disabled=false;if(sapp)deleteApp(sapp).catch(()=>{})}};
+paintCart();
 </script>
 </body>
 </html>
