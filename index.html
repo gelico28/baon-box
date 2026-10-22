@@ -95,6 +95,22 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
 .tot{display:flex;justify-content:space-between;font-family:Fredoka,sans-serif;font-size:1.25rem;font-weight:600;margin-top:10px}
 .dash{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}.dc{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px}.dc b{display:block;font-family:Fredoka,sans-serif;font-size:1.5rem;color:var(--primary)}.dc small{color:var(--mut);font-weight:600}
 .em{position:relative;overflow:hidden}.big{position:relative;overflow:hidden}.em img,.big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.wrap{animation:up .3s ease both}@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.wrap{animation:none}.pc{transition:none}}
+.hi{background:linear-gradient(135deg,#FF5500,#FF9F66);color:#fff;border-radius:28px;padding:20px 20px 56px;margin-top:4px;box-shadow:0 10px 24px rgba(255,85,0,.25)}
+.hi h2{color:#fff;font-size:1.6rem}.hi p{color:#ffe6d5;margin:4px 0 0}
+.search{margin:-28px 14px 0;position:relative}.search input{box-shadow:0 6px 16px rgba(42,33,24,.12);border:0;padding-top:14px;padding-bottom:14px}
+.pc{transition:transform .15s,box-shadow .15s;box-shadow:0 2px 8px rgba(42,33,24,.06)}.pc:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(42,33,24,.14)}
+.price{background:var(--peach);padding:2px 10px;border-radius:99px;align-self:flex-start;display:inline-block}
+.wb{display:inline-block;margin-top:4px;background:#DDF3DE;color:var(--green);font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:99px;align-self:flex-start}
+.nav{box-shadow:0 -6px 20px rgba(42,33,24,.08);border-radius:22px 22px 0 0}
+.nav button.on:before{content:"";position:absolute;top:0;left:30%;right:30%;height:3px;border-radius:0 0 4px 4px;background:var(--primary)}
+.btn{box-shadow:0 6px 14px rgba(255,85,0,.25)}.btn.sec{box-shadow:none}
+.card{box-shadow:0 2px 10px rgba(42,33,24,.05)}.top .brand{font-size:1.7rem}
+.qa{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.qbtn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border:1.5px solid var(--line);border-radius:18px;background:#fff;font:inherit;font-weight:700;font-size:.82rem;cursor:pointer;color:var(--ink)}
+.qbtn i{font-size:1.3rem;color:var(--primary)}.qbtn:hover{background:var(--peach)}
+.dc i{font-size:1.1rem;margin-bottom:4px;display:block}
 @media(min-width:700px){.dash{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
 </style>
@@ -112,6 +128,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
    <label for="lPw">Password</label><input id="lPw" type="password" autocomplete="current-password">
    <button id="bLogin" class="btn" type="button">Log in</button>
    <p style="margin:12px 0 0"><button id="bForgot" class="link" type="button">Forgot password?</button></p>
+   <p class="sub" style="margin:16px 0 0;text-align:center">Don't have an account? <button class="link" type="button" data-sw="reg">Register</button></p>
   </div>
   <div id="fReg" class="hidden">
    <div class="r2"><div><label for="rFirst">First name</label><input id="rFirst" autocomplete="given-name"></div><div><label for="rLast">Last name</label><input id="rLast" autocomplete="family-name"></div></div>
@@ -121,6 +138,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
    <div class="r2"><div><label for="rPw">Password</label><input id="rPw" type="password" autocomplete="new-password"></div><div><label for="rPw2">Confirm</label><input id="rPw2" type="password" autocomplete="new-password"></div></div>
    <label class="chk"><input id="rConsent" type="checkbox"><span>I agree to the <button id="bPriv" class="link" type="button">Data Privacy Notice</button> and consent to the processing of my personal information.</span></label>
    <button id="bReg" class="btn" type="button">Create account</button>
+   <p class="sub" style="margin:16px 0 0;text-align:center">Already have an account? <button class="link" type="button" data-sw="log">Login</button></p>
   </div>
   <div id="aMsg" class="msg" role="status" aria-live="polite"></div>
  </div></div>
@@ -141,16 +159,35 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
   <div id="grid" class="grid"></div>
  </div>
  <div id="vCart" class="wrap hidden"><div class="top"><span class="brand">Your <span class="o">Cart</span></span></div>
+  <div id="cBud" class="banner hidden" style="align-items:flex-start"></div>
   <div id="cartList"></div>
   <div class="card"><div class="tot" style="margin:0"><span>Total</span><span id="cartTot" class="o">₱0</span></div><button id="bCheck" class="btn" type="button">Checkout</button></div>
  </div>
  <div id="vOrders" class="wrap hidden"><div class="top"><span class="brand">Your <span class="o">Orders</span></span></div>
   <div id="dash" class="dash hidden"></div>
   <div id="oBar" class="bar hidden"><input id="oQ" type="search" placeholder="Search customer or phone" style="flex:1;min-width:160px;border-radius:99px" aria-label="Search orders"><select id="oStatus" aria-label="Filter by status"><option value="">All statuses</option><option>Pending</option><option>Preparing</option><option>Ready</option><option>Completed</option><option>Cancelled</option></select></div>
+  <div class="tabs"><button id="oAct" class="on" type="button">Active</button><button id="oHis" type="button">History</button></div>
+  <p id="oSum" class="sub" style="margin:8px 0 12px"></p>
   <div id="oList"></div>
+ </div>
+ <div id="vUsers" class="wrap hidden"><div class="top"><span class="brand">Manage <span class="o">Users</span></span><button id="uBack" class="btn sm sec" type="button"><i class="fa-solid fa-arrow-left"></i> Back</button></div>
+  <input id="uQ" type="search" placeholder="Search name, email, or phone" aria-label="Search users" style="border-radius:99px;margin-bottom:8px">
+  <p id="uCount" class="sub" style="margin:0 0 12px"></p>
+  <div id="uList"></div>
  </div>
  <div id="vProf" class="wrap hidden">
   <div class="who"><div id="avBig" class="av">B</div><h2 id="pName"></h2><p id="pMail" class="sub"></p><span id="pRole" class="rolechip"></span></div>
+  <div id="adminBox" class="hidden" style="margin-top:14px">
+   <div id="ovw" class="dash"></div>
+   <div class="card"><b>Quick actions</b>
+    <div class="qa">
+     <button id="qMeals" class="qbtn" type="button"><i class="fa-solid fa-bowl-food"></i><span>Manage meals</span></button>
+     <button id="qOrders" class="qbtn" type="button"><i class="fa-solid fa-receipt"></i><span>Manage orders</span></button>
+     <button id="qUsers" class="qbtn" type="button"><i class="fa-solid fa-users"></i><span>Manage users</span></button>
+     <button id="qStatus" class="qbtn" type="button"><i class="fa-solid fa-list-check"></i><span>Order status</span></button>
+    </div>
+   </div>
+  </div>
   <div class="card" style="margin-top:14px"><b>My details</b><p class="sub" id="pInfo"></p>
    <div class="r2"><div><label for="pFirst">First name</label><input id="pFirst" autocomplete="given-name"></div><div><label for="pLast">Last name</label><input id="pLast" autocomplete="family-name"></div></div>
    <label for="pPhone">Mobile number</label><input id="pPhone" type="tel" autocomplete="tel">
@@ -166,7 +203,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
    <button id="bDel" class="btn sec" type="button" style="color:var(--danger)"><i class="fa-solid fa-trash"></i> Delete account</button>
   </div>
  </div>
- <nav class="nav"><div><button id="nHome" class="on" type="button"><i class="fa-solid fa-house"></i><span id="nHomeL">Home</span></button><button id="nCart" type="button"><i class="fa-solid fa-cart-shopping"></i>Cart<span id="cBdg" class="bdg hidden">0</span></button><button id="nOrd" type="button"><i class="fa-solid fa-receipt"></i>Orders<span id="oBdg" class="bdg hidden">0</span></button><button id="nProf" type="button"><i class="fa-regular fa-user"></i>Profile</button></div></nav>
+ <nav class="nav"><div><button id="nHome" class="on" type="button"><i class="fa-solid fa-house"></i><span id="nHomeL">Home</span></button><button id="nCart" type="button"><i class="fa-solid fa-cart-shopping"></i>Cart<span id="cBdg" class="bdg hidden">0</span></button><button id="nOrd" type="button"><i class="fa-solid fa-receipt"></i>Orders<span id="oBdg" class="bdg hidden">0</span></button><button id="nProf" type="button"><i class="fa-regular fa-user"></i><span id="nProfL">Profile</span></button></div></nav>
 </div>
 
 <!-- Product details -->
@@ -291,21 +328,21 @@ async function route(u){
  $("pInfo").textContent="Keep your details up to date so your orders reach you.";$("pFirst").value=p.firstName||"";$("pLast").value=p.lastName||"";$("pPhone").value=p.phone||"";$("pAddr").value=p.address||"";$("pLand").value=p.landmark||"";
  $("hiName").textContent=role==="admin"?"Menu manager":"Hi, "+(p.firstName||"there")+"!";
  $("hiSub").textContent=role==="admin"?"Add, edit, hide, or remove items.":"What's for baon today?";
- $("nHomeL").textContent=role==="admin"?"Menu":"Home";$("nCart").classList.toggle("hidden",role==="admin");$("oBar").classList.toggle("hidden",role!=="admin");$("dash").classList.toggle("hidden",role!=="admin");$("budBox").classList.toggle("hidden",role==="admin");$("bAdmin").classList.toggle("hidden",role!=="admin");
+ $("nHomeL").textContent=role==="admin"?"Menu":"Home";$("nCart").classList.toggle("hidden",role==="admin");$("oBar").classList.toggle("hidden",role!=="admin");$("dash").classList.toggle("hidden",role!=="admin");$("budBox").classList.toggle("hidden",role==="admin");$("bAdmin").classList.toggle("hidden",role!=="admin");$("adminBox").classList.toggle("hidden",role!=="admin");$("nProfL").textContent=role==="admin"?"Account":"Profile";
  ["bAdd","bSample"].forEach(i=>$(i).classList.toggle("hidden",role!=="admin"));
  $("vBanner").classList.toggle("hidden",role==="admin"||u.emailVerified);
  $("auth").classList.add("hidden");$("app").classList.remove("hidden");go("home");
  if(unsub)unsub();
  unsub=onSnapshot(collection(db,"products"),s=>{prods=s.docs.map(d=>Object.assign({id:d.id},d.data()));render();paintCart()},()=>toast("Could not load the menu. Check your Firestore Rules."));
- listenOrders(u);
+ listenOrders(u);listenUsers();
 }
 if(setup)onAuthStateChanged(auth,u=>{if(registering)return;
- if(!u){if(unsub){unsub();unsub=null}if(unsubO){unsubO();unsubO=null}prods=[];orders=[];$("app").classList.add("hidden");$("auth").classList.remove("hidden");return}
+ if(!u){if(unsub){unsub();unsub=null}if(unsubO){unsubO();unsubO=null}if(unsubU){unsubU();unsubU=null}prods=[];orders=[];usersAll=[];$("app").classList.add("hidden");$("auth").classList.remove("hidden");return}
  route(u)});
 
 /* nav */
-const VIEW={home:"vHome",cart:"vCart",ord:"vOrders",prof:"vProf"},NAVB={home:"nHome",cart:"nCart",ord:"nOrd",prof:"nProf"};
-function go(v){Object.keys(VIEW).forEach(k=>{$(VIEW[k]).classList.toggle("hidden",v!==k);$(NAVB[k]).classList.toggle("on",v===k)});window.scrollTo(0,0)}
+const VIEW={home:"vHome",cart:"vCart",ord:"vOrders",prof:"vProf",users:"vUsers"},NAVB={home:"nHome",cart:"nCart",ord:"nOrd",prof:"nProf"};
+function go(v){Object.keys(VIEW).forEach(k=>{$(VIEW[k]).classList.toggle("hidden",v!==k);if(NAVB[k])$(NAVB[k]).classList.toggle("on",v===k)});window.scrollTo(0,0)}
 $("nHome").onclick=()=>go("home");$("nCart").onclick=()=>go("cart");$("nOrd").onclick=()=>go("ord");$("nProf").onclick=()=>go("prof");
 
 /* browse */
@@ -314,11 +351,11 @@ $("chips").onclick=e=>{const b=e.target.closest("button[data-c]");if(!b)return;c
 $("q").oninput=render;$("sort").onchange=render;
 function render(){
  const q=$("q").value.trim().toLowerCase();
- let a=prods.filter(p=>role==="admin"||p.available!==false).filter(p=>cat==="All"||p.category===cat).filter(p=>!budget||Number(p.price)<=budget).filter(p=>!q||((p.name||"")+" "+(p.description||"")+" "+(p.category||"")).toLowerCase().includes(q));
+ let a=prods.filter(p=>role==="admin"||p.available!==false).filter(p=>cat==="All"||p.category===cat).filter(p=>role==="admin"||!budget||Number(p.price)<=budget).filter(p=>!q||((p.name||"")+" "+(p.description||"")+" "+(p.category||"")).toLowerCase().includes(q));
  a.sort((x,y)=>$("sort").value==="low"?(x.price||0)-(y.price||0):(x.category||"").localeCompare(y.category||"")||(x.name||"").localeCompare(y.name||""));
- $("count").textContent=a.length+(a.length===1?" item":" items");paintCombo();
+ $("count").textContent=a.length+(a.length===1?" item":" items");paintCombo();paintOverview();
  $("grid").innerHTML=a.length?a.map(p=>'<div class="pc'+(p.available===false?" off":"")+'" data-id="'+esc(p.id)+'"><div class="em">'+pic(p)+"</div>"+(p.isBundle?'<span class="tag">Bundle</span>':"")+(p.available===false?'<span class="tag g">Hidden</span>':"")+
-  '<div class="pb"><b>'+esc(p.name)+"</b><small>"+esc(p.category)+'</small><span class="price">'+peso(p.price)+"</span></div>"+
+  '<div class="pb"><b>'+esc(p.name)+"</b><small>"+esc(p.category)+'</small><span class="price">'+peso(p.price)+"</span>"+(role!=="admin"&&budget&&Number(p.price)<=budget?'<span class="wb"><i class="fa-solid fa-check"></i> Within budget</span>':"")+"</div>"+
   (role!=="admin"?'<button class="add" data-a="add" aria-label="Add to cart"><i class="fa-solid fa-plus"></i></button>':"")+(role==="admin"?'<div class="acts"><button data-a="edit" aria-label="Edit"><i class="fa-solid fa-pen"></i></button><button data-a="tog" aria-label="Show or hide"><i class="fa-solid '+(p.available===false?"fa-eye":"fa-eye-slash")+'"></i></button><button data-a="del" class="d" aria-label="Delete"><i class="fa-solid fa-trash"></i></button></div>':"")+"</div>").join(""):
   '<div class="empty">'+(prods.length?"No items match your search.":role==="admin"?"No menu items yet. Tap Add item or Load sample menu.":"The menu is empty for now. Please check back soon!")+"</div>"}
 chips();
@@ -367,13 +404,17 @@ function addCart(p){cart[p.id]={qty:(cart[p.id]?cart[p.id].qty:0)+1};saveCart();
 $("dAdd").onclick=()=>{if(detP){addCart(detP);$("mDet").classList.add("hidden")}};
 function paintCart(){const L=lines(),n=L.reduce((a,l)=>a+l.qty,0),b=$("cBdg");b.textContent=n;b.classList.toggle("hidden",!n);
  $("cartList").innerHTML=L.length?L.map(l=>'<div class="row"><div class="em">'+pic(l.p)+'</div><div class="mid"><b>'+esc(l.p.name)+'</b><span class="price">'+peso(l.p.price)+'</span></div><div class="qty"><button data-id="'+esc(l.p.id)+'" data-d="-1" aria-label="Decrease">-</button><b>'+l.qty+'</b><button data-id="'+esc(l.p.id)+'" data-d="1" aria-label="Increase">+</button></div></div>').join(""):'<div class="empty">Your cart is empty. Browse the menu and tap + to add meals.</div>';
- $("cartTot").textContent=peso(total());$("bCheck").disabled=!L.length}
+ $("cartTot").textContent=peso(total());$("bCheck").disabled=!L.length;
+ const cb=$("cBud"),t=total();
+ if(budget>0&&L.length){const over=t-budget;cb.classList.remove("hidden");cb.style.background=over>0?"var(--dangerbg)":"#DDF3DE";cb.style.color=over>0?"var(--danger)":"var(--green)";
+  cb.innerHTML=over>0?'<i class="fa-solid fa-triangle-exclamation"></i><span><b>Exceeded your '+peso(budget)+' budget.</b> Total '+peso(t)+" - "+peso(over)+" over your budget.</span>":'<i class="fa-solid fa-circle-check"></i><span><b>Within your '+peso(budget)+' budget.</b> '+peso(-over)+" left.</span>"}
+ else cb.classList.add("hidden")}
 $("cartList").onclick=e=>{const b=e.target.closest("button[data-id]");if(!b)return;const id=b.dataset.id,q=(cart[id]?cart[id].qty:0)+Number(b.dataset.d);if(q<=0)delete cart[id];else cart[id]={qty:q};saveCart();paintCart()};
 
 /* ---------- checkout ---------- */
 function ff(){$("cAddrBox").classList.toggle("hidden",document.querySelector("input[name=ff]:checked").value!=="Delivery")}
 document.querySelectorAll("input[name=ff]").forEach(r=>r.onchange=ff);
-$("bCheck").onclick=()=>{if(!lines().length)return;$("cPhone").value=me&&me.phone||"";$("cAddr").value=me?(me.address||"")+(me.landmark?" ("+me.landmark+")":""):"";$("cNotes").value="";msg($("cMsg"),"","e");ff();pmUi();$("cSum").textContent=peso(total());$("mChk").classList.remove("hidden")};
+$("bCheck").onclick=()=>{if(!lines().length)return;$("cPhone").value=me&&me.phone||"";$("cAddr").value=me?(me.address||"")+(me.landmark?" ("+me.landmark+")":""):"";$("cNotes").value="";msg($("cMsg"),"","e");ff();pmUi();$("cSum").textContent=peso(total());if(budget&&total()>budget)msg($("cMsg"),"Heads up: this order is "+peso(total()-budget)+" over your "+peso(budget)+" budget.","e");$("mChk").classList.remove("hidden")};
 $("cCancel").onclick=()=>$("mChk").classList.add("hidden");
 $("cPlace").onclick=async()=>{const u=auth.currentUser;if(!u)return;
  try{await u.reload();await u.getIdToken(true)}catch(e){}
@@ -397,10 +438,11 @@ function listenOrders(u){if(unsubO)unsubO();firstO=true;orders=[];
  unsubO=onSnapshot(ref,s=>{orders=s.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>tm(b.createdAt)-tm(a.createdAt));
   if(role==="admin"&&!firstO&&s.docChanges().some(c=>c.type==="added"&&!c.doc.metadata.hasPendingWrites)){toast("New order received!");beep()}
   firstO=false;paintOrders()},()=>{$("oList").innerHTML='<div class="empty">Could not load orders. Check your Firestore Rules.</div>'})}
-function paintOrders(){const adm=role==="admin",pend=orders.filter(o=>o.status==="Pending").length,nb=$("oBdg");nb.textContent=pend;nb.classList.toggle("hidden",!adm||!pend);if(adm)paintDash();
+function paintOrders(){const adm=role==="admin",pend=orders.filter(o=>o.status==="Pending").length,nb=$("oBdg");nb.textContent=pend;nb.classList.toggle("hidden",!adm||!pend);if(adm){paintDash();paintOverview()}
  const q=$("oQ").value.trim().toLowerCase(),fs=$("oStatus").value;
- const a=adm?orders.filter(o=>(!fs||o.status===fs)&&(!q||((o.customerName||"")+" "+(o.phone||"")).toLowerCase().includes(q))):orders;
- $("oList").innerHTML=a.length?a.map(o=>ocard(o,adm)).join(""):'<div class="empty">'+(orders.length?"No orders match your filters.":adm?"No orders yet.":"You have no orders yet. Place your first order from the Home tab.")+"</div>"}
+ const src=orders.filter(o=>(otab==="active")===ACT.includes(o.status)),a=adm?src.filter(o=>(!fs||o.status===fs)&&(!q||((o.customerName||"")+" "+(o.phone||"")).toLowerCase().includes(q))):src;
+ $("oSum").textContent=otab==="history"?src.length+" past order"+(src.length===1?"":"s")+" - "+peso(src.filter(o=>o.status==="Completed").reduce((x,o)=>x+Number(o.total||0),0))+(adm?" in sales":" spent"):"";
+ $("oList").innerHTML=a.length?a.map(o=>ocard(o,adm)).join(""):'<div class="empty">'+(otab==="history"?"No past orders yet. Completed and cancelled orders will appear here.":orders.length?"No orders match your filters.":adm?"No orders yet.":"You have no orders yet. Place your first order from the Home tab.")+"</div>"}
 function ocard(o,adm){const items=(o.items||[]).map(i=>"<p>"+i.qty+" x "+esc(i.name)+" - "+peso(i.price*i.qty)+"</p>").join("");
  let h='<div class="oc"><div class="h"><b>Order #'+esc(o.id.slice(0,6).toUpperCase())+'</b><span class="bd b-'+esc(o.status)+'">'+esc(o.status)+"</span></div><p>"+esc(od(o.createdAt))+" - "+esc(o.fulfillment)+"</p>";
  if(adm)h+="<p><b>"+esc(o.customerName)+"</b> - "+esc(o.phone)+"</p>"+(o.address?"<p><b>Address:</b> "+esc(o.address)+"</p>":"");
@@ -417,9 +459,10 @@ $("oList").onchange=async e=>{const s=e.target.closest("select[data-oid]");if(!s
  try{await updateDoc(doc(db,"orders",s.dataset.oid),{status:s.value,updatedBy:myName(),updatedByUid:auth.currentUser.uid,updatedAt:serverTimestamp()});toast("Status updated to "+s.value);notifyCustomer(orders.find(x=>x.id===s.dataset.oid),s.value)}
  catch(x){toast(err(x))}finally{s.disabled=false}};
 /* ---------- budget-based selection ---------- */
-let budget=0;
-$("budget").oninput=()=>{budget=Math.max(0,parseFloat($("budget").value)||0);render()};
-$("bBudClr").onclick=()=>{$("budget").value="";budget=0;render()};
+let budget=0;try{budget=parseFloat(localStorage.getItem("bbBudget"))||0}catch(e){}
+$("budget").value=budget||"";
+$("budget").oninput=()=>{budget=Math.max(0,parseFloat($("budget").value)||0);try{localStorage.setItem("bbBudget",budget)}catch(e){}render();paintCart()};
+$("bBudClr").onclick=()=>{$("budget").value="";budget=0;try{localStorage.setItem("bbBudget",0)}catch(e){}render();paintCart()};
 function paintCombo(){const el=$("combo");if(!budget){el.innerHTML="";return}
  const av=prods.filter(p=>p.available!==false),by=(cs,max)=>av.filter(p=>cs.includes(p.category)&&Number(p.price)<=max).sort((a,b)=>b.price-a.price)[0];
  const m=by(["Rice Meals","Budget Bundles"],budget);
@@ -451,7 +494,7 @@ $("dCancel").onclick=()=>$("mDel").classList.add("hidden");
 $("dOk").onclick=async()=>{const u=auth.currentUser,pw=$("dPw").value;if(!u)return;if(!pw)return msg($("dMsg"),"Enter your password.","e");
  const b=$("dOk");b.disabled=true;msg($("dMsg"),"");
  try{await reauthenticateWithCredential(u,EmailAuthProvider.credential(u.email,pw))}catch(x){msg($("dMsg"),err(x),"e");b.disabled=false;return}
- try{if(unsub){unsub();unsub=null}if(unsubO){unsubO();unsubO=null}
+ try{if(unsub){unsub();unsub=null}if(unsubO){unsubO();unsubO=null}if(unsubU){unsubU();unsubU=null}
   const q=await getDocs(query(collection(db,"orders"),where("uid","==",u.uid)));
   let bt=writeBatch(db),n=0;
   for(const d of q.docs){bt.delete(d.ref);if(++n>=400){await bt.commit();bt=writeBatch(db);n=0}}
@@ -482,7 +525,7 @@ $("eFile").onchange=()=>{const f=$("eFile").files[0];if(!f)return;const r=new Fi
 
 /* ---------- payment options ---------- */
 // Put your real GCash and Maya account details here.
-const PAY={GCash:{name:"(Angelico)",number:"09123456789"},Maya:{name:"(Angelico)",number:"09123456789"}};
+const PAY={GCash:{name:"Angelico",number:"09123456789"},Maya:{name:"Angelico",number:"09123456789"}};
 const PM={COD:"Cash on pickup/delivery",GCash:"GCash",Maya:"Maya"};
 const payTxt=o=>(PM[o.paymentMethod]||o.paymentMethod||"")+(o.paymentStatus?" - "+o.paymentStatus:"")+(o.paymentRef?" (Ref. "+o.paymentRef+")":"");
 const pmv=()=>document.querySelector("input[name=pm]:checked").value;
@@ -503,6 +546,30 @@ $("bSaveProf").onclick=async()=>{const u=auth.currentUser;if(!u)return;const f=$
   msg($("pMsg"),"Your details have been updated.","o")}
  catch(x){msg($("pMsg"),err(x),"e")}finally{b.disabled=false}};
 $("bPass").onclick=async()=>{try{await sendPasswordResetEmail(auth,auth.currentUser.email);toast("Password reset link sent to your email.")}catch(x){toast(err(x))}};
+/* ---------- login/register switch ---------- */
+document.querySelectorAll("[data-sw]").forEach(b=>b.onclick=()=>tab(b.dataset.sw==="log"));
+
+/* ---------- order tabs ---------- */
+let otab="active";const ACT=["Pending","Preparing","Ready"];
+function tabsUi(){$("oAct").classList.toggle("on",otab==="active");$("oHis").classList.toggle("on",otab==="history");paintOrders()}
+$("oAct").onclick=()=>{otab="active";tabsUi()};$("oHis").onclick=()=>{otab="history";tabsUi()};
+
+/* ---------- admin: users, overview, quick actions ---------- */
+let usersAll=[],unsubU=null;
+function listenUsers(){if(unsubU){unsubU();unsubU=null}usersAll=[];if(role!=="admin")return;
+ unsubU=onSnapshot(collection(db,"users"),sn=>{usersAll=sn.docs.map(d=>Object.assign({id:d.id},d.data()));paintOverview();paintUsers()},()=>{})}
+function paintOverview(){if(role!=="admin")return;const sales=orders.filter(o=>o.status==="Completed").reduce((x,o)=>x+Number(o.total||0),0);
+ $("ovw").innerHTML=[["fa-peso-sign","Total sales",peso(sales)],["fa-bowl-food","Total meals",prods.length],["fa-receipt","Total orders",orders.length],["fa-users","Total users",usersAll.length]].map(x=>'<div class="dc"><i class="fa-solid '+x[0]+' o"></i><b>'+x[2]+"</b><small>"+x[1]+"</small></div>").join("")}
+function paintUsers(){const q=($("uQ").value||"").trim().toLowerCase();
+ const a=usersAll.filter(u=>!q||((u.firstName||"")+" "+(u.lastName||"")+" "+(u.email||"")+" "+(u.phone||"")).toLowerCase().includes(q)).sort((x,y)=>(x.firstName||"").localeCompare(y.firstName||""));
+ $("uCount").textContent=a.length+" user"+(a.length===1?"":"s");
+ $("uList").innerHTML=a.length?a.map(u=>{const mine=orders.filter(o=>o.uid===u.id),spent=mine.filter(o=>o.status==="Completed").reduce((x,o)=>x+Number(o.total||0),0);
+  return'<div class="oc"><div class="h"><b>'+esc(((u.firstName||"")+" "+(u.lastName||"")).trim()||"No name")+'</b><span class="bd '+(u.role==="admin"?"b-Preparing":"b-Completed")+'">'+(u.role==="admin"?"Admin":"Customer")+"</span></div><p>"+esc(u.email)+"</p><p>"+esc(u.phone||"No phone")+" - "+esc(u.address||"No address")+(u.landmark?" ("+esc(u.landmark)+")":"")+"</p><p><b>"+mine.length+"</b> orders - <b>"+peso(spent)+"</b> spent</p></div>"}).join(""):'<div class="empty">No users found.</div>'}
+$("uQ").oninput=paintUsers;$("uBack").onclick=()=>go("prof");
+$("qMeals").onclick=()=>go("home");
+$("qOrders").onclick=()=>{otab="active";$("oStatus").value="";tabsUi();go("ord")};
+$("qUsers").onclick=()=>{paintUsers();go("users")};
+$("qStatus").onclick=()=>{otab="active";$("oStatus").value="Pending";tabsUi();go("ord")};
 paintCart();
 </script>
 </body>
